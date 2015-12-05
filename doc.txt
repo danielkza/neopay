@@ -1,0 +1,32 @@
+conta:
+    - nome, idade, localidade, etc
+    - redes sociais
+        - whatsapp
+        - facebook?
+        - twitter?
+    - identificação: número do celular
+    - referals
+    - pagamentos efetuados
+    - recebimentos
+    - meios de pagamento (simplify)
+    - descontos
+    - contatos?
+transferencias:
+    - fonte
+    - destino
+    - valor
+    - referal
+    - descontos associados
+estabelecimentos:
+    - nome
+    - local
+    - ramo
+    - descontos
+    - perfil de cliente
+    - consumidores
+
+
+integração whatsapp:
+    
+
+

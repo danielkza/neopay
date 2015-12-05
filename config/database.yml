@@ -1,0 +1,17 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  host: localhost
+  user: neopay
+  password: neopay
+  pool: 5
+
+development:
+  <<: *default
+  database: neopay_development
+test:
+  <<: *default
+  database: neopay_test
+production:
+  <<: *default
+  database: neopay_production
