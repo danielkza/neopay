@@ -5,3 +5,9 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+Currency.create(name: 'Real', symbol: 'R$')
+Currency.create(name: 'US Dollar', symbol: 'US$')
+Currency.create(name: 'Euro', symbol: '€')
+
+
