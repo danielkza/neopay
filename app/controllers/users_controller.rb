@@ -60,13 +60,12 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    ok = transaction do
-      ref = params[:ref_user_id]
-      if ref.nil?
-        @user.save
-      else
-        @user.save && Referral.create(old_user_id: ref, new_user_id: @user.id)
-      end
+    ok = User.transaction do
+      ref_id = params[:ref_user_id]
+      ref = ref_id && User.find(ref_id)
+
+      @user.save!
+      Referral.create!(old_user_id: ref.id, new_user_id: @user.id) unless ref.nil?
     end
 
     respond_to do |format|
