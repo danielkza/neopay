@@ -12,14 +12,14 @@ Rails.application.routes.draw do
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   resources :users do
-    get 'by_phone', to: 'users#by_phone'
+    get 'by-phone/:phone', to: :by_phone
+    post 'transfer/:other_number', to: :transfer_money
+    post 'recharge', to: :add_money
   end
 
-  resources :merchants do
-    get 'by_city_and_code', to: 'merchants#by_city_and_code'
-  end
-
-  resources :discounts
+  # resources :merchants do
+  #   get 'city/:city/postal-code/:postal_code', to: 'merchants#by_city_and_code'
+  # end
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

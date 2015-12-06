@@ -2,9 +2,22 @@ class UsersController < ApplicationController
   before_action :json_only
   before_action :set_user, only: [:show, :update, :add_money, :transfer_money]
 
-  def show
+  def index
     respond_to do |f|
       f.json { render json: User.all, status: :ok}
+    end
+  end
+
+  def show
+    respond_to do |f|
+      f.json { render json: @user }
+    end
+  end
+
+  def by_phone
+    @user = User.find_by_phone!(params[:phone])
+    respond_to do |f|
+      f.json { render json: @user }
     end
   end
 

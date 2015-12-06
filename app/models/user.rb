@@ -17,12 +17,19 @@ class User < ActiveRecord::Base
     in_t - out_t
   end
 
-  def transfer_to(other_number, amount, msg, currency=nil, discount=nil, merchant=nil)
+  def transfer_to(other_number, amount, msg=nil, currency=nil, discount=nil, merchant=nil)
     currency ||= default_currency
     return false if balance(currency) < amount
 
     transaction do
-      msg_text = <<EOF
+      to_user = User.find_by_phone(to_number)
+      if to_user.nil?
+        to_user = User.create!(phone: to_number)
+        Referral.create!(old_user_id: from_user.id, new_user_id: to_user.id)
+      end
+
+      unless msg.nil?
+        Message.create(from: self, to: to_user, text: <<EOF
 Welcome to NeoPay! You have received a transfer of #{currency.symbol} #{amount} from #{self.name},
 with the following message:
 
@@ -35,10 +42,10 @@ Now we can start your service.
 
 Now please tell me - what is your full name?
 EOF
-      message = Message.create_with_new_user(self, other_number, msg_text)
-      other_user = message.to
+        )
+      end
 
-      Transfer.create(from_user: self, to_user: other_user, currency: currency, amount: amount)
+      Transfer.create(from_user: self, to_user: to_user, currency: currency, amount: amount)
     end
   end
 end
