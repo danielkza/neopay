@@ -19,7 +19,7 @@ class SessionsController < ApplicationController
     end
 
     respond_to do |f|
-      if @session.saved?
+      if @session.persisted?
         f.json { render json: @session, status: :ok }
       else
         f.json { render json: @session.errors, status: :unprocessable_entity }
