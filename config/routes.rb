@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get 'sessions/:phone' => 'sessions#show'
   put 'sessions/:phone' => 'sessions#update'
-  
+
   # resources :merchants do
   #   get 'city/:city/postal-code/:postal_code', to: 'merchants#by_city_and_code'
   # end

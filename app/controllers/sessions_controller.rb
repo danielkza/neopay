@@ -3,7 +3,7 @@ class SessionsController < ApplicationController
 
   def show
     respond_to do |f|
-      if @session.nil?
+      unless @session.nil?
         f.json { render json: @session, status: :ok }
       else
         f.json { render nothing: true, status: :not_found }
@@ -29,6 +29,6 @@ class SessionsController < ApplicationController
 
   private
   def set_session
-    @session = Session.find_by_phone(param[:phone])
+    @session = Session.find_by_phone(params[:phone])
   end
 end
