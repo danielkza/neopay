@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151205222606) do
+ActiveRecord::Schema.define(version: 20151206062012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -79,18 +79,21 @@ ActiveRecord::Schema.define(version: 20151205222606) do
 
   create_table "users", force: :cascade do |t|
     t.string   "name"
-    t.datetime "birthday"
     t.string   "gender"
     t.string   "location"
-    t.string   "phone",                          null: false
-    t.integer  "sign_in_count",      default: 0, null: false
+    t.string   "phone",                           null: false
+    t.integer  "sign_in_count",       default: 0, null: false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
     t.integer  "currency_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.date     "birthday"
+    t.integer  "default_currency_id"
+    t.integer  "conversation_state",  default: 0
+    t.string   "ssn",                             null: false
   end
 
   add_index "users", ["currency_id"], name: "index_users_on_currency_id", using: :btree
@@ -107,4 +110,5 @@ ActiveRecord::Schema.define(version: 20151205222606) do
   add_foreign_key "transfers", "users", column: "from_user_id"
   add_foreign_key "transfers", "users", column: "to_user_id"
   add_foreign_key "users", "currencies"
+  add_foreign_key "users", "currencies", column: "default_currency_id"
 end
