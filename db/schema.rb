@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151206144536) do
+ActiveRecord::Schema.define(version: 20151206134722) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -49,8 +49,8 @@ ActiveRecord::Schema.define(version: 20151206144536) do
   add_index "merchants", ["user_id"], name: "index_merchants_on_user_id", using: :btree
 
   create_table "messages", force: :cascade do |t|
-    t.integer  "from_num"
-    t.integer  "to_num"
+    t.integer  "from_id"
+    t.integer  "to_id"
     t.string   "text",       null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -116,6 +116,8 @@ ActiveRecord::Schema.define(version: 20151206144536) do
   add_foreign_key "discounts", "currencies"
   add_foreign_key "discounts", "merchants"
   add_foreign_key "merchants", "users"
+  add_foreign_key "messages", "users", column: "from_id"
+  add_foreign_key "messages", "users", column: "to_id"
   add_foreign_key "referrals", "merchants"
   add_foreign_key "referrals", "transfers"
   add_foreign_key "referrals", "users", column: "new_user_id"
