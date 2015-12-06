@@ -25,7 +25,7 @@ class User < ActiveRecord::Base
       to_user = User.find_by_phone(other_number)
       if to_user.nil?
         to_user = User.create!(phone: other_number)
-        Referral.create!(old_user_id: from_user.id, new_user_id: to_user.id)
+        Referral.create!(old_user_id: self.id, new_user_id: to_user.id)
       end
 
       unless msg.nil?
