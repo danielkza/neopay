@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   has_many :referrals, class_name: 'Referral', foreign_key: :old_user_id
   belongs_to :default_currency, class_name: 'Currency'
 
-  def balance(currency)
+  def balance(currency=nil)
     currency ||= default_currency
 
     in_t = in_transfers.where(currency: currency).pluck(:amount).reduce(0, :+)
