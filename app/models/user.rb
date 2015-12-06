@@ -12,6 +12,7 @@ class User < ActiveRecord::Base
 
   def balance(currency=nil)
     currency ||= default_currency
+    currency ||= Currency.first
 
     in_t = in_transfers.where(currency: currency).pluck(:amount).reduce(0, :+)
     out_t = out_transfers.where(currency: currency).pluck(:amount).reduce(0, :+)
@@ -20,6 +21,8 @@ class User < ActiveRecord::Base
 
   def transfer_to(other_number, amount, msg=nil, currency=nil, discount=nil, merchant=nil)
     currency ||= default_currency
+    currency ||= Currency.first
+    
     return false if balance(currency) < amount
 
     transaction do
