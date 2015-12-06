@@ -3,6 +3,9 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:show, :add_money, :transfer_money]
 
   def show
+    respond_to do |f|
+      f.json { render json: User.all }
+    end
   end
 
   def get_amount
