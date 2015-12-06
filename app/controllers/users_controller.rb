@@ -1,10 +1,20 @@
 class UsersController < ApplicationController
   before_action :json_only
-  before_action :set_user, only: [:show, :add_money, :transfer_money]
+  before_action :set_user, only: [:show, :update, :add_money, :transfer_money]
 
   def show
     respond_to do |f|
-      f.json { render json: User.all }
+      f.json { render json: User.all, status: :ok}
+    end
+  end
+
+  def update
+    respond_to do |f|
+      if @user.update(user_update_params)
+        f.json { render json: @user, status: :ok }
+      else
+        f.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -62,17 +72,14 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-
-    User.transaction do
-      ref_id = params[:ref_user_id]
-      ref = ref_id && User.find(ref_id)
-
-      @user.save!
-      Referral.create!(old_user_id: ref.id, new_user_id: @user.id) unless ref.nil?
-    end
+    @user.default_currency = Currency.first
 
     respond_to do |f|
-      f.json { render json: @user, status: :created, location: @user }
+      if @user.save
+        f.json { render json: @user, status: :created, location: @user }
+      else
+        f.json { render json: @user.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -86,5 +93,9 @@ class UsersController < ApplicationController
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
     params.require(:user).permit(:name, :phone, :ssn, :ref_user_id)
+  end
+
+  def user_update_params
+    params.require(:user).permit(:conversation_state, :name, :ssn)
   end
 end
