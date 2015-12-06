@@ -60,7 +60,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
 
-    ok = User.transaction do
+    User.transaction do
       ref_id = params[:ref_user_id]
       ref = ref_id && User.find(ref_id)
 
@@ -68,12 +68,8 @@ class UsersController < ApplicationController
       Referral.create!(old_user_id: ref.id, new_user_id: @user.id) unless ref.nil?
     end
 
-    respond_to do |format|
-      if ok
-        format.json { render json: @user, status: :created, location: @user }
-      else
-        format.json { render json: @user.errors, status: :unprocessable_entity }
-      end
+    respond_to do |f|
+      f.json { render json: @user, status: :created, location: @user }
     end
   end
 
@@ -86,6 +82,6 @@ class UsersController < ApplicationController
 
   # Never trust parameters from the scary internet, only allow the white list through.
   def user_params
-    params.require(:user).permit(:name, :phone, :ssn)
+    params.require(:user).permit(:name, :phone, :ssn, :ref_user_id)
   end
 end
