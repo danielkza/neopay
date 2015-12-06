@@ -19,6 +19,8 @@ Rails.application.routes.draw do
     post 'recharge' => :add_money, as: :recharge
   end
 
+  resources :sessions, only: [:show, :update]
+
   # resources :merchants do
   #   get 'city/:city/postal-code/:postal_code', to: 'merchants#by_city_and_code'
   # end

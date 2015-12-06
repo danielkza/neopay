@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151206074603) do
+ActiveRecord::Schema.define(version: 20151206133846) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -68,6 +68,13 @@ ActiveRecord::Schema.define(version: 20151206074603) do
   add_index "referrals", ["merchant_id"], name: "index_referrals_on_merchant_id", using: :btree
   add_index "referrals", ["transfer_id"], name: "index_referrals_on_transfer_id", using: :btree
 
+  create_table "sessions", force: :cascade do |t|
+    t.string   "phone"
+    t.string   "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "transfers", force: :cascade do |t|
     t.integer  "from_user_id"
     t.integer  "to_user_id"
@@ -101,7 +108,7 @@ ActiveRecord::Schema.define(version: 20151206074603) do
     t.date     "birthday"
     t.integer  "default_currency_id"
     t.integer  "conversation_state",  default: 0
-    t.string   "ssn",                             null: false
+    t.string   "ssn"
   end
 
   add_index "users", ["currency_id"], name: "index_users_on_currency_id", using: :btree
