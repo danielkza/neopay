@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
-  validates_uniqueness_of :phone, :ssn
+  validates_uniqueness_of :phone
+  validates_uniqueness_of :ssn, allow_nil: true
   validates_presence_of :phone
 
   has_many :in_transfers, class_name: 'Transfer', foreign_key: :to_user_id
