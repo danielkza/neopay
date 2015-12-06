@@ -29,7 +29,7 @@ class User < ActiveRecord::Base
       end
 
       unless msg.nil?
-        Message.create(from: self, to: to_user, text: <<EOF
+        Message.create(from_num: self.phone, to_num: to_user.phone, text: <<EOF
 Welcome to NeoPay! You have received a transfer of #{currency.symbol} #{amount} from #{self.name},
 with the following message:
 
