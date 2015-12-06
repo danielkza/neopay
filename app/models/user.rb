@@ -17,16 +17,28 @@ class User < ActiveRecord::Base
     in_t - out_t
   end
 
-  def transfer_to(other, amount, currency=nil, discount=nil, merchant=nil)
-    transaction do
-      currency ||= other.default_currency
+  def transfer_to(other_number, amount, msg, currency=nil, discount=nil, merchant=nil)
+    currency ||= default_currency
+    return false if balance(currency) < amount
 
-      if balance(currency) < amount
-        false
-      else
-        Transfer.create(from_user: self, currency: currency, to_user: other, amount: amount, discount: discount,
-                        merchant: merchant)
-      end
+    transaction do
+      msg_text = <<EOF
+Welcome to NeoPay! You have received a transfer of #{currency.symbol} #{amount} from #{self.name},
+with the following message:
+
+#{msg}
+
+You will soon be able to redeem it by following a few simple steps.
+
+At any time during our conversation you can type HELP and receive an options menu.
+Now we can start your service.
+
+Now please tell me - what is your full name?
+EOF
+      message = Message.create_with_new_user(self, other_number, msg_text)
+      other_user = message.to
+
+      Transfer.create(from_user: self, to_user: other_user, currency: currency, amount: amount)
     end
   end
 end

@@ -55,12 +55,11 @@ class UsersController < ApplicationController
   end
 
   def transfer_money
-    other = User.find(params[:other_user_id])
     amount = get_amount
     return if amount.nil?
 
     respond_to do |f|
-      if !@user.transfer_to(other, amount)
+      if !@user.transfer_to(params[:other_number], amount, params[:message])
         f.json { render json: @user.errors, status: :unprocessable_entity }
       else
         f.json { render nothing: true, status: :ok }
