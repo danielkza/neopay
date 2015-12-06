@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   def show
     respond_to do |f|
       unless @session.nil?
-        f.json { render json: @session, status: :ok }
+        f.json { render json: @session.data, status: :ok }
       else
         f.json { render nothing: true, status: :not_found }
       end
@@ -13,9 +13,9 @@ class SessionsController < ApplicationController
 
   def update
     if @session.nil?
-      @session = Session.create(phone: params[:phone], data: params[:data])
+      @session = Session.create(phone: params[:phone], data: request.raw_post)
     else
-      @session.update(data: params[:data])
+      @session.update(data: request.raw_post)
     end
 
     respond_to do |f|
