@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
   get 'users/by-phone/:phone' => 'users#by_phone', as: :users_by_phone
+  get 'messages' => 'messages#get_messages', as: :messages
 
   resources :users do
     post 'transfer/:other_number' => :transfer_money, as: :transfer_money
