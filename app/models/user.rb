@@ -22,7 +22,7 @@ class User < ActiveRecord::Base
   def transfer_to(other_number, amount, msg=nil, currency=nil, discount=nil, merchant=nil)
     currency ||= default_currency
     currency ||= Currency.first
-    
+
     return false if balance(currency) < amount
 
     transaction do
@@ -33,20 +33,28 @@ class User < ActiveRecord::Base
       end
 
       unless msg.nil?
-        Message.create(from_num: self.phone, to_num: to_user.phone, text: <<EOF
+        if Transfer.exists?(to_user: to_user)
+          msg = <<EOF
+You have received a transfer of #{currency.symbol} #{amount} from #{self.name},
+with the following message:
+
+#{msg}
+
+EOF
+        else
+          msg = <<EOF
 Welcome to NeoPay! You have received a transfer of #{currency.symbol} #{amount} from #{self.name},
 with the following message:
 
 #{msg}
 
-You will soon be able to redeem it by following a few simple steps.
+You will soon be able to redeem it by following a few simple steps. Just reply to this message whenever you're ready.
 
-At any time during our conversation you can type HELP and receive an options menu.
-Now we can start your service.
-
-Now please tell me - what is your full name?
+Reply with "cancel" at any time if you wish to continue at a different time.
 EOF
-        )
+        end
+
+        Message.create(from_num: self.phone, to_num: to_user.phone, text: msg)
       end
 
       Transfer.create(from_user: self, to_user: to_user, currency: currency, amount: amount)
