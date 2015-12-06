@@ -39,9 +39,9 @@ class UsersController < ApplicationController
       end
 
       nil
+    else
+      amount
     end
-
-    amount
   end
 
   def add_money
