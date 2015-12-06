@@ -22,9 +22,9 @@ class User < ActiveRecord::Base
     return false if balance(currency) < amount
 
     transaction do
-      to_user = User.find_by_phone(to_number)
+      to_user = User.find_by_phone(other_number)
       if to_user.nil?
-        to_user = User.create!(phone: to_number)
+        to_user = User.create!(phone: other_number)
         Referral.create!(old_user_id: from_user.id, new_user_id: to_user.id)
       end
 
@@ -47,5 +47,9 @@ EOF
 
       Transfer.create(from_user: self, to_user: to_user, currency: currency, amount: amount)
     end
+  end
+
+  def as_json(options={})
+    super(options).merge(balance: balance(default_currency))
   end
 end

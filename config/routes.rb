@@ -11,10 +11,11 @@ Rails.application.routes.draw do
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
+  get 'users/by-phone/:phone' => 'users#by_phone', as: :users_by_phone
+
   resources :users do
-    get 'by-phone/:phone', to: :by_phone
-    post 'transfer/:other_number', to: :transfer_money
-    post 'recharge', to: :add_money
+    post 'transfer/:other_number' => :transfer_money, as: :transfer_money
+    post 'recharge' => :add_money, as: :recharge
   end
 
   # resources :merchants do

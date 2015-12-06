@@ -17,7 +17,7 @@ class UsersController < ApplicationController
   def by_phone
     @user = User.find_by_phone!(params[:phone])
     respond_to do |f|
-      f.json { render json: @user }
+      f.json { render json: @user, status: :ok }
     end
   end
 
