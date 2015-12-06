@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     amount = BigDecimal.new(params[:amount])
     if amount <= 0
       respond_to do |f|
-        f.json { render json: ["Invalid amount"], status: :unprocessable_entity }
+        f.json { render json: {status: '422', errors: ['Invalid amount']}, status: :unprocessable_entity }
       end
 
       nil
@@ -36,7 +36,7 @@ class UsersController < ApplicationController
       sys_user.transfer_to(@user, amount)
 
       respond_to do |f|
-        f.json { render nothing: true, status: :ok }
+        f.json { render json: @user, status: :ok, location: @user }
       end
     end
   end
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
 
     respond_to do |f|
       if !@user.transfer_to(other, amount)
-        f.json { render json: ["Not enough balance"], status: :unprocessable_entity }
+        f.json { render json: @user.errors, status: :unprocessable_entity }
       else
         f.json { render nothing: true, status: :ok }
       end
@@ -70,7 +70,7 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       if ok
-        format.json { render :show, status: :created, location: @user }
+        format.json { render json: @user, status: :created, location: @user }
       else
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

@@ -8,4 +8,4 @@
 
 Currency.create!(name: 'US Dollar', symbol: 'US$')
 
-
+User.create!(name: 'System user', phone: '5511123456789', ssn: '078-05-1120')
